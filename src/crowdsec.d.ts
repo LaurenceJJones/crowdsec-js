@@ -1,5 +1,5 @@
 export interface CrowdsecConfig {
-    httpVerb: string,
+    scheme: string,
     host: string,
     apiVersion: string,
     port: Number | string,

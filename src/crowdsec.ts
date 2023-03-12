@@ -5,7 +5,7 @@ import { BouncerConfig } from './bouncer.d';
 export class Crowdsec {
     private _config: CrowdsecConfig;
     constructor (config: CrowdsecConfig = {
-        httpVerb: `http`,
+        scheme: `http`,
         host: `localhost`,
         port: `8080`,
         apiVersion: `v1`
@@ -13,12 +13,12 @@ export class Crowdsec {
         this._config = config
     }
 
-    formatUrl (endpoint: string) {
-        return `${this._config.httpVerb}://${this._config.host}${this._config.port ? `:${this._config.port}` : ``}/${this._config.apiVersion}${endpoint[0] === `/` ? `${endpoint}` : `/${endpoint}`}`
+    FormatUrl (endpoint: string) {
+        return `${this._config.scheme}://${this._config.host}${this._config.port ? `:${this._config.port}` : ``}/${this._config.apiVersion}${endpoint[0] === `/` ? `${endpoint}` : `/${endpoint}`}`
     }
 
-    generateRequest (endpoint: string, additionalHeaders: Record<string, string> = {}, method: string = `GET`): Request {
-        return new Request(this.formatUrl(endpoint), {
+    GenerateRequest (endpoint: string, additionalHeaders: Record<string, string> = {}, method: string = `GET`): Request {
+        return new Request(this.FormatUrl(endpoint), {
             headers: {
                 'Accept': 'application/json',
                 ...additionalHeaders,
@@ -27,8 +27,8 @@ export class Crowdsec {
         })
     }
 
-    generateJSONRequest<T> (endpoint: string, body: T,additionalHeaders: Record<string, string> = {}, method: string = `POST`): Request {
-        return new Request(this.formatUrl(endpoint), {
+    GenerateJSONRequest<T> (endpoint: string, body: T,additionalHeaders: Record<string, string> = {}, method: string = `POST`): Request {
+        return new Request(this.FormatUrl(endpoint), {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
@@ -39,7 +39,15 @@ export class Crowdsec {
         })
     }
 
-    bouncer(Config: BouncerConfig): Bouncer {
-        return new Bouncer(Config)
+    GenerateQuerystring (o: Object): string {
+        let _temp = []
+        for (const [key, value] of Object.entries(o)) {
+            _temp.push(`${encodeURIComponent(key)}=${encodeURIComponent(Array.isArray(value) ? value.join(`,`) : value)}`)
+        }
+        return _temp.join(`&`)
+    }
+
+    Bouncer(Config: BouncerConfig): Bouncer {
+        return new Bouncer(Config, this)
     }
 }
