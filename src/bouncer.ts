@@ -13,14 +13,8 @@ export class Bouncer {
         this._parent = parent
     }
     //Local helper to generate with api key
-    Get (endpoint: string): Request {
+    private get (endpoint: string): Request {
         return this._parent.GenerateRequest(endpoint, {
-            'X-Api-Key': this._config.apiKey,
-        })
-    }
-    //Local helper to generate with api key
-    GetJson<T> (endpoint: string, body: T): Request {
-        return this._parent.GenerateJSONRequest(endpoint, body, {
             'X-Api-Key': this._config.apiKey,
         })
     }
@@ -42,12 +36,12 @@ export class Bouncer {
         let _queryString = ""
         if (Filter !== undefined)
             _queryString = this._parent.GenerateQuerystring(Filter)
-        const res = await fetch(this.Get(`/decisions?${_queryString}`))
+        const res = await fetch(this.get(`/decisions?${_queryString}`))
         return await (res.json() as Promise<Decision[]>)
     }
 
     async IsIpBanned (ip: string): Promise<Boolean> {
-        const res = await fetch(this.Get(`/decisions?ip=${ip}`))
+        const res = await fetch(this.get(`/decisions?ip=${ip}`))
         const _decisions = await (res.json() as Promise<Decision[]>)
         return _decisions.length > 0
     }

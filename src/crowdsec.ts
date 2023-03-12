@@ -1,6 +1,8 @@
 import { CrowdsecConfig } from './crowdsec.d';
 import { Bouncer } from './bouncer'
 import { BouncerConfig } from './bouncer.d';
+import { Watcher } from './watcher'
+import { WatcherConfig } from './watcher.d';
 
 export class Crowdsec {
     private _config: CrowdsecConfig;
@@ -49,5 +51,9 @@ export class Crowdsec {
 
     Bouncer(Config: BouncerConfig): Bouncer {
         return new Bouncer(Config, this)
+    }
+
+    Watcher(Config: WatcherConfig): Watcher {
+        return new Watcher(Config, this)
     }
 }
