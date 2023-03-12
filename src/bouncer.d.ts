@@ -1,14 +1,10 @@
+import { BaseFilter } from "./shared";
 export interface BouncerConfig {
     apiKey: string,
     userAgent?: string,
 }
 
-export interface DecisionFilter {
-    scope?: string;
-    value?: string;
-    type?: string;
-    ip?: string;
-    range?: string;
+export interface DecisionFilter extends BaseFilter {
     contains?: Boolean;
     origins?: string;
     scenarios_containing?: string | string[];
