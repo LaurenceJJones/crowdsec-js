@@ -29,7 +29,7 @@ export class Watcher {
         return true
     }
 
-    async GetAlerts (Filter: AlertFilter): Promise<Alert[]> {
+    async GetAlerts (Filter?: AlertFilter): Promise<Alert[]> {
         try {
             let _queryString = ""
             if (Filter !== undefined)
@@ -52,7 +52,7 @@ export class Watcher {
         return {} as Alert
     }
 
-    async DeleteAlerts (Filter: AlertDeleteFilter): Promise<Boolean> {
+    async DeleteAlerts (Filter?: AlertDeleteFilter): Promise<Boolean> {
         try {
             let _queryString = ""
             if (Filter !== undefined)
